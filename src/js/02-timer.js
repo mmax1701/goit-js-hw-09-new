@@ -12,6 +12,8 @@ const seconds = document.querySelector('span[data-seconds]')
 const date = new Date();
 start.disabled = true;
 
+let getDate
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -23,6 +25,7 @@ const options = {
             window.alert("Please choose a date in the future");
         } else {
             start.disabled = false;
+            getDate = convertMs((selectedDates[0].getTime() - date.getTime()))
         }
   },
 };
@@ -30,6 +33,35 @@ const options = {
 const fp = flatpickr(input, options);
 
 
+start.addEventListener('click', onClick)
+
+function onClick() {
+    start.disabled = true;
+    days.textContent = getDate.days;
+    hours.textContent = getDate.hours;
+    minutes.textContent = getDate.minutes;
+    seconds.textContent = getDate.seconds;
+}
+
+
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+  return { days, hours, minutes, seconds };
+}
 
 
 
