@@ -9,7 +9,7 @@ const hours = document.querySelector('span[data-hours]')
 const minutes = document.querySelector('span[data-minutes]')
 const seconds = document.querySelector('span[data-seconds]')
 
-const date = new Date();
+
 start.disabled = true;
 
 let getDate
@@ -19,13 +19,16 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-    onClose(selectedDates) {
-        console.log(selectedDates[0]);
+  onClose(selectedDates) {
+      const date = new Date();
+      // console.log(selectedDates[0]);
         if (date.getTime() > selectedDates[0].getTime()) {
             window.alert("Please choose a date in the future");
         } else {
             start.disabled = false;
-            getDate = convertMs((selectedDates[0].getTime() - date.getTime()))
+          // getDate = convertMs((selectedDates[0].getTime() - date.getTime()))
+          // getDate = selectedDates[0].getTime() - date.getTime()
+          getDate = selectedDates[0].getTime()
         }
   },
 };
@@ -37,10 +40,20 @@ start.addEventListener('click', onClick)
 
 function onClick() {
     start.disabled = true;
-    days.textContent = getDate.days;
-    hours.textContent = getDate.hours;
-    minutes.textContent = getDate.minutes;
-    seconds.textContent = getDate.seconds;
+  // const newDate = convertMs(getDate)
+  
+ const timer = setInterval(() => {
+    const date = getDate - (new Date().getTime());
+
+    days.textContent = addLeadingZero(convertMs(date).days);
+    hours.textContent = addLeadingZero(convertMs(date).hours);
+    minutes.textContent = addLeadingZero(convertMs(date).minutes);
+    seconds.textContent = addLeadingZero(convertMs(date).seconds);
+ }, 1000)
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0')
 }
 
 
